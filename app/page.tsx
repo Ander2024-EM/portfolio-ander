@@ -2,6 +2,12 @@
 
 import { useMemo, useState } from 'react'
 
+type GalleryItem = {
+  src: string
+  title: string
+  description: string
+}
+
 type Project = {
   title: string
   category: string
@@ -9,16 +15,22 @@ type Project = {
   description: string
   stack: string[]
   status: string
+  objective: string
+  architecture: string
+  features: string[]
+  gallery: GalleryItem[]
   link?: string
 }
 
 export default function PortfolioAnderEli() {
   const [soundOn, setSoundOn] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [activeFilter, setActiveFilter] = useState('Todos')
 
   const stats = [
-    { number: '6+', label: 'Proyectos técnicos' },
-    { number: '15+', label: 'Tecnologías usadas' },
+    { number: '5+', label: 'Proyectos reales' },
+    { number: '20+', label: 'Tecnologías usadas' },
     { number: 'API', label: 'REST Backend' },
     { number: 'JR', label: 'Software Developer' }
   ]
@@ -27,63 +39,385 @@ export default function PortfolioAnderEli() {
     'Python', 'Flask', 'Java', 'JavaScript', 'Android Studio', 'MySQL',
     'MariaDB', 'SQLite', 'Git', 'GitHub', 'REST APIs', 'Linux VPS',
     'Nginx', 'Retrofit', 'HTML5', 'CSS3', 'Tailwind CSS', 'PDF/CSV',
-    'NetBeans', 'SCRUM básico'
+    'NetBeans', 'Java Swing', 'JDBC', 'SCRUM básico'
   ]
 
   const projects: Project[] = [
     {
-      title: 'Punto de Venta Empresarial',
-      category: 'Sistema Administrativo',
-      image: '/screenshots/sistemaVenta.png',
+      title: 'Sistema AVL de Estudiantes',
+      category: 'Java Swing + Estructuras de Datos',
+      image: '/screenshots/ArbolAVL/PanelInicio.png',
       description:
-        'Sistema POS con módulos de ventas, compras, inventario, proveedores, productos, cajas, usuarios, sucursales y devoluciones.',
-      stack: ['Java', 'Swing', 'MySQL/MariaDB', 'NetBeans'],
-      status: 'Proyecto real'
+        'Sistema de gestión de estudiantes basado en Árbol AVL. Permite registrar estudiantes, visualizar el árbol balanceado, consultar recorridos, generar reportes y usar un asistente inteligente integrado.',
+      stack: ['Java', 'Java Swing', 'Árbol AVL', 'MySQL/MariaDB', 'PDF', 'CSV', 'IA integrada'],
+      status: 'Sistema académico funcional',
+      objective:
+        'Construí este proyecto para aplicar estructuras de datos en un sistema visual, mostrando cómo un Árbol AVL puede organizar información estudiantil de forma ordenada y eficiente.',
+      architecture:
+        'Java Swing → Árbol AVL → Base de datos → Reportes PDF/CSV/TXT → Asistente integrado',
+      features: [
+        'Registro, búsqueda, modificación y eliminación de estudiantes.',
+        'Visualización gráfica del Árbol AVL.',
+        'Recorridos Inorden, Preorden y Postorden.',
+        'Generación de reportes PDF, CSV y TXT.',
+        'Configuración visual en modo claro y oscuro.',
+        'Asistente inteligente integrado para explicar el sistema.'
+      ],
+      gallery: [
+        {
+          src: '/screenshots/ArbolAVL/PanelInicio.png',
+          title: 'Panel principal',
+          description:
+            'Pantalla inicial con acceso a estudiantes, árbol AVL, recorridos, reportes y configuración general.'
+        },
+        {
+          src: '/screenshots/ArbolAVL/Estudiantes.png',
+          title: 'Gestión de estudiantes',
+          description:
+            'Módulo para administrar estudiantes, cargar datos, buscar registros y mantener la información ordenada.'
+        },
+        {
+          src: '/screenshots/ArbolAVL/MostrarArbolAVL.png',
+          title: 'Visualización del árbol',
+          description:
+            'Representación visual del Árbol AVL, mostrando nodos, estructura y balanceo.'
+        },
+        {
+          src: '/screenshots/ArbolAVL/MostrarOrdenes.png',
+          title: 'Recorridos del árbol',
+          description:
+            'Módulo para mostrar recorridos Inorden, Preorden y Postorden.'
+        },
+        {
+          src: '/screenshots/ArbolAVL/DescargarRegistros.png',
+          title: 'Descarga de registros',
+          description:
+            'Centro de reportes para generar archivos PDF, CSV y TXT.'
+        },
+        {
+          src: '/screenshots/ArbolAVL/ConfiguracionesModoClaro.png',
+          title: 'Configuración modo claro',
+          description:
+            'Panel de configuración para cambiar opciones visuales y de actualización.'
+        },
+        {
+          src: '/screenshots/ArbolAVL/Configuraciones_ModoOscuro.png',
+          title: 'Configuración modo oscuro',
+          description:
+            'Versión oscura de la configuración del sistema.'
+        },
+        {
+          src: '/screenshots/ArbolAVL/MostrarRecorridodelaAPPconIA.png',
+          title: 'Asistente inteligente',
+          description:
+            'Asistente integrado que explica módulos y ayuda al usuario dentro del sistema.'
+        }
+      ]
     },
     {
-      title: 'Login Sistema de Ventas',
-      category: 'Seguridad y Acceso',
-      image: '/screenshots/login_SistemVenta.png',
+      title: 'Sistema de Asistencia Escolar',
+      category: 'Android + Flask + Telegram',
+      image: '/screenshots/Asistencia/ModuloPrincipal_asistencia.jpg',
       description:
-        'Pantalla de autenticación para sistema administrativo con acceso controlado por usuario y conexión a base de datos.',
-      stack: ['Java', 'Swing', 'Base de datos', 'Login'],
-      status: 'Módulo funcional'
+        'Aplicación móvil para registrar estudiantes, tomar asistencia, descargar registros y enviar notificaciones automáticas mediante Telegram.',
+      stack: ['Android Studio', 'Flask', 'MySQL', 'Retrofit', 'Telegram Bot', 'CSV'],
+      status: 'App móvil conectada a API',
+      objective:
+        'Desarrollé este sistema para facilitar el control de asistencia escolar desde una aplicación móvil conectada a un backend propio.',
+      architecture:
+        'Android → Retrofit → API Flask → MySQL → Telegram Bot → Reportes CSV',
+      features: [
+        'Inicio de sesión desde la app móvil.',
+        'Registro de estudiantes.',
+        'Gestión de estudiantes con edición y eliminación.',
+        'Búsqueda de registros por nombre, código o fecha.',
+        'Descarga de registros en CSV.',
+        'Notificaciones automáticas mediante Telegram.'
+      ],
+      gallery: [
+        {
+          src: '/screenshots/Asistencia/login_asistencia.jpg',
+          title: 'Login móvil',
+          description:
+            'Pantalla de acceso al sistema con diseño moderno.'
+        },
+        {
+          src: '/screenshots/Asistencia/ModuloPrincipal_asistencia.jpg',
+          title: 'Panel principal',
+          description:
+            'Menú principal con acceso a registro, asistencia, descarga y gestión de estudiantes.'
+        },
+        {
+          src: '/screenshots/Asistencia/crearEstudiante_Asistencia.jpg',
+          title: 'Registro de estudiante',
+          description:
+            'Formulario para guardar estudiante con código, nombre, edad y teléfono.'
+        },
+        {
+          src: '/screenshots/Asistencia/GestionEstudiante_Asitencia.jpg',
+          title: 'Gestión de estudiantes',
+          description:
+            'Listado de estudiantes con opciones para editar y eliminar.'
+        },
+        {
+          src: '/screenshots/Asistencia/Buscar_Asistencia.jpg',
+          title: 'Búsqueda de asistencia',
+          description:
+            'Módulo para buscar registros y descargar información por fecha o estudiante.'
+        },
+        {
+          src: '/screenshots/Asistencia/boot_Asitencia.jpg',
+          title: 'Notificación Telegram',
+          description:
+            'Mensaje automático enviado al registrar asistencia.'
+        }
+      ]
+    },
+    {
+      title: 'Comercializadora Los 3 Hermanos',
+      category: 'Android POS + API REST',
+      image: '/screenshots/Comercializadora/PanelInicio1_Comercializadora.jpg',
+      description:
+        'Sistema comercial móvil para ventas, inventario, clientes, productos, proveedores, tickets, historial y reportes.',
+      stack: ['Android Studio', 'Retrofit', 'Flask', 'MySQL', 'Nginx', 'Linux VPS', 'PDF'],
+      status: 'Sistema comercial móvil',
+      objective:
+        'Mi objetivo fue construir una app comercial completa para apoyar la administración de productos, ventas, clientes y reportes de una comercializadora.',
+      architecture:
+        'Android → Retrofit → API Flask → MySQL → VPS Linux → Reportes PDF',
+      features: [
+        'Login empresarial.',
+        'Panel ejecutivo con ventas, clientes, productos y stock bajo.',
+        'Gestión de productos con imágenes, precios y stock.',
+        'Gestión de clientes y proveedores.',
+        'Ventas con carrito, total, pago y cambio.',
+        'Ticket digital con opción de PDF e impresión.',
+        'Historial de ventas con filtros.',
+        'Catálogo comercial exportado en PDF.'
+      ],
+      gallery: [
+        {
+          src: '/screenshots/Comercializadora/Login_Comercializadora.jpg',
+          title: 'Login comercial',
+          description:
+            'Pantalla de inicio de sesión para acceder al sistema.'
+        },
+        {
+          src: '/screenshots/Comercializadora/PanelInicio1_Comercializadora.jpg',
+          title: 'Panel ejecutivo',
+          description:
+            'Resumen con ventas del día, productos, clientes, stock bajo y gráfica semanal.'
+        },
+        {
+          src: '/screenshots/Comercializadora/PanelIncio2_Comercializadora.jpg',
+          title: 'Accesos rápidos',
+          description:
+            'Accesos directos a ventas, productos, clientes, proveedores e historial.'
+        },
+        {
+          src: '/screenshots/Comercializadora/CrearProductos1_Comercializadora.jpg',
+          title: 'Nuevo producto',
+          description:
+            'Formulario para crear productos con imagen, código, nombre y escaneo.'
+        },
+        {
+          src: '/screenshots/Comercializadora/CrearProductos2_Comercializadora.jpg',
+          title: 'Datos del producto',
+          description:
+            'Registro de marca, categoría, proveedor, costos y precios.'
+        },
+        {
+          src: '/screenshots/Comercializadora/CrearProductos3_Comercializadora.jpg',
+          title: 'Inventario del producto',
+          description:
+            'Control de stock por cajas, unidades, stock mínimo y guardado.'
+        },
+        {
+          src: '/screenshots/Comercializadora/VerProductos_Comercializadora.jpg',
+          title: 'Listado de productos',
+          description:
+            'Vista de productos con precio por unidad, caja y stock disponible.'
+        },
+        {
+          src: '/screenshots/Comercializadora/CrearClientes.jpg',
+          title: 'Crear clientes',
+          description:
+            'Formulario para registrar clientes dentro del sistema.'
+        },
+        {
+          src: '/screenshots/Comercializadora/VerClientes.jpg',
+          title: 'Ver clientes',
+          description:
+            'Listado de clientes registrados en la aplicación.'
+        },
+        {
+          src: '/screenshots/Comercializadora/VenderProducto_Comercializadora.jpg',
+          title: 'Venta POS',
+          description:
+            'Carrito de venta con cantidad, subtotal, efectivo recibido, total y cambio.'
+        },
+        {
+          src: '/screenshots/Comercializadora/TicketVenta_Comercializadora.jpg',
+          title: 'Ticket de venta',
+          description:
+            'Ticket generado con productos, cantidad, pago y total.'
+        },
+        {
+          src: '/screenshots/Comercializadora/VerTicketVenta.jpg',
+          title: 'Ticket PDF',
+          description:
+            'Vista de ticket comercial con opción de guardar e imprimir.'
+        },
+        {
+          src: '/screenshots/Comercializadora/VerRegistroVentas.jpg',
+          title: 'Historial de ventas',
+          description:
+            'Listado de ventas con filtros por fecha y búsqueda por ticket.'
+        },
+        {
+          src: '/screenshots/Comercializadora/CatalogoProductosPDF_Comercializadora.jpg',
+          title: 'Catálogo PDF',
+          description:
+            'Catálogo de productos exportado en PDF.'
+        }
+      ]
+    },
+    {
+      title: 'Sistema de Venta de Escritorio',
+      category: 'Java Swing + MySQL',
+      image: '/screenshots/SistemaVenta/sistemaVenta.png',
+      description:
+        'Sistema de escritorio para punto de venta con módulos de ventas, compras, inventario, proveedores, productos, devoluciones, sucursales, cajas y usuarios.',
+      stack: ['Java', 'Swing', 'JDBC', 'MySQL/MariaDB', 'NetBeans'],
+      status: 'POS escritorio',
+      objective:
+        'Este proyecto me permitió construir lógica administrativa completa: ventas, inventario, compras, devoluciones, roles, usuarios, cajas y sucursales.',
+      architecture:
+        'Java Swing → JDBC → MySQL/MariaDB → Inventario → Ventas → Reportes',
+      features: [
+        'Login con usuario, rol, sucursal y caja.',
+        'Nueva venta con productos, cantidades, pago y cambio.',
+        'Inventario por sucursal.',
+        'Registro de productos, proveedores y compras.',
+        'Control de devoluciones.',
+        'Administración de usuarios, roles, cajas y sucursales.',
+        'Historial de ventas.'
+      ],
+      gallery: [
+        {
+          src: '/screenshots/SistemaVenta/Login1.png',
+          title: 'Login con caja',
+          description:
+            'Inicio de sesión con correo, contraseña y selección de caja.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/Login2.png',
+          title: 'Acceso autorizado',
+          description:
+            'Mensaje de bienvenida con usuario, sucursal y caja seleccionada.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/sistemaVenta.png',
+          title: 'Panel principal',
+          description:
+            'Menú lateral con acceso a todos los módulos administrativos.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/NuevaVenta.png',
+          title: 'Nueva venta',
+          description:
+            'Módulo POS para agregar artículos, calcular total, recibir pago y cambio.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/ventas.png',
+          title: 'Historial de ventas',
+          description:
+            'Tabla de ventas con fecha, sucursal, caja, usuario, total y estado.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/Inventario.png',
+          title: 'Inventario',
+          description:
+            'Control de existencias y stock mínimo por producto.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/CrearProductos.png',
+          title: 'Productos',
+          description:
+            'CRUD de productos con categoría, proveedor, unidad de medida y precios.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/Compra.png',
+          title: 'Compras',
+          description:
+            'Registro de compras por proveedor, factura, cantidad y total.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/Proveedores.png',
+          title: 'Proveedores',
+          description:
+            'Administración de proveedores con NIT, teléfono, dirección y estado.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/Devoluciones.png',
+          title: 'Devoluciones',
+          description:
+            'Control de devoluciones con venta asociada, motivo y acción tomada.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/Sucursales.png',
+          title: 'Sucursales',
+          description:
+            'Gestión de sucursales con dirección, teléfono y estado.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/cahas.png',
+          title: 'Cajas',
+          description:
+            'Administración de cajas por sucursal y estado.'
+        },
+        {
+          src: '/screenshots/SistemaVenta/Usuarios.png',
+          title: 'Usuarios',
+          description:
+            'Gestión de usuarios con nombre, correo, rol, sucursal y estado.'
+        }
+      ]
     },
     {
       title: 'Gestor Web de Productos',
       category: 'Aplicación Web',
-      image: '/screenshots/web-productos.png',
+      image: '/screenshots/WebProductos/web-productos.png',
       description:
-        'Aplicación web con login, CRUD de productos, subida de imágenes, exportaciones PDF/Excel y despliegue en la nube.',
-      stack: ['Flask', 'SQLite', 'HTML', 'CSS', 'JavaScript'],
-      status: 'Web app'
-    },
-    {
-      title: 'Sistema de Asistencia Escolar',
-      category: 'Backend + Android',
-      image: '/screenshots/asistencia.png',
-      description:
-        'Sistema para registrar estudiantes, tomar asistencia, generar QR, exportar reportes PDF/CSV y enviar notificaciones automáticas por Telegram.',
-      stack: ['Flask', 'Android', 'MySQL', 'Retrofit', 'Telegram', 'VPS'],
-      status: 'Agregar captura'
-    },
-    {
-      title: 'API Comercializadora',
-      category: 'Backend REST',
-      image: '/screenshots/api.png',
-      description:
-        'API REST desarrollada en Python/Flask para conectar aplicación Android con base de datos, reportes, ventas, clientes y productos.',
-      stack: ['Python', 'Flask', 'MySQL', 'Nginx', 'Linux'],
-      status: 'Agregar captura'
-    },
-    {
-      title: 'App Android Comercializadora',
-      category: 'Mobile App',
-      image: '/screenshots/android.png',
-      description:
-        'Aplicación Android conectada a API REST para consumo de datos, gestión comercial y operaciones desde dispositivo móvil.',
-      stack: ['Android Studio', 'Java/Kotlin', 'Retrofit', 'API REST'],
-      status: 'Agregar captura'
+        'Aplicación web para gestionar productos con login, carga de imágenes, búsqueda, filtros, exportación, comentarios y control de estado.',
+      stack: ['HTML', 'CSS', 'JavaScript', 'Flask/Python', 'SQLite/MySQL'],
+      status: 'Web app',
+      objective:
+        'Lo hice para practicar desarrollo web completo con autenticación, formularios, manejo de imágenes, filtros y comentarios por producto.',
+      architecture:
+        'Frontend Web → Backend → Base de datos → Imágenes → Comentarios → Exportación',
+      features: [
+        'Login de usuario.',
+        'Agregar productos con nombre, precio e imagen.',
+        'Buscar, filtrar y ordenar productos.',
+        'Editar, deshabilitar y eliminar productos.',
+        'Sistema de comentarios por producto.',
+        'Exportación de datos.'
+      ],
+      gallery: [
+        {
+          src: '/screenshots/WebProductos/login-web-productos.png',
+          title: 'Login web',
+          description:
+            'Inicio de sesión para acceder al panel administrativo.'
+        },
+        {
+          src: '/screenshots/WebProductos/web-productos.png',
+          title: 'Panel de productos',
+          description:
+            'Gestión de productos con imagen, precio, estado, comentarios, filtros y acciones.'
+        }
+      ]
     }
   ]
 
@@ -99,14 +433,14 @@ export default function PortfolioAnderEli() {
       icon: '📱'
     },
     {
+      title: 'Sistemas Administrativos',
+      description: 'Sistemas de ventas, inventario, asistencia, usuarios, reportes y gestión empresarial.',
+      icon: '🧩'
+    },
+    {
       title: 'Bases de Datos',
       description: 'Diseño y manejo de bases de datos MySQL, MariaDB y SQLite.',
       icon: '🗄️'
-    },
-    {
-      title: 'Despliegue Web',
-      description: 'Configuración básica de VPS Linux, Nginx, dominios y publicación de APIs.',
-      icon: '🚀'
     }
   ]
 
@@ -128,7 +462,18 @@ export default function PortfolioAnderEli() {
     }
   ]
 
+  const filters = ['Todos', 'Android', 'Java Swing', 'Web', 'Backend']
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === 'Todos') return projects
+
+    return projects.filter((project) => {
+      const text = `${project.title} ${project.category} ${project.stack.join(' ')}`.toLowerCase()
+      return text.includes(activeFilter.toLowerCase())
+    })
+  }, [activeFilter])
+
   const featuredProjects = useMemo(() => projects.slice(0, 3), [])
+  const currentGalleryItem = selectedProject?.gallery[selectedImageIndex]
 
   function playClickSound() {
     if (!soundOn) return
@@ -145,6 +490,12 @@ export default function PortfolioAnderEli() {
 
     oscillator.start()
     oscillator.stop(audioContext.currentTime + 0.08)
+  }
+
+  function openProject(project: Project) {
+    playClickSound()
+    setSelectedProject(project)
+    setSelectedImageIndex(0)
   }
 
   return (
@@ -210,13 +561,14 @@ export default function PortfolioAnderEli() {
 
             <div className="mt-10 flex flex-wrap gap-4">
               <a href="#proyectos" onClick={playClickSound} className="btn-primary">Ver proyectos</a>
-              <a href="mailto:albertelias924@gmail.com" onClick={playClickSound} className="btn-secondary">Contactarme</a>
-              <a href="https://github.com/Ander2024-EM" target="_blank" onClick={playClickSound} className="btn-secondary">GitHub</a>
+              <a href="https://wa.me/50254266873" target="_blank" rel="noopener noreferrer" onClick={playClickSound} className="btn-secondary">WhatsApp</a>
+              <a href="mailto:albertelias924@gmail.com" onClick={playClickSound} className="btn-secondary">Correo</a>
+              <a href="https://github.com/Ander2024-EM" target="_blank" rel="noopener noreferrer" onClick={playClickSound} className="btn-secondary">GitHub</a>
             </div>
 
             <div className="mt-10 flex flex-wrap gap-5 text-sm text-gray-400">
               <span>📍 Coatepeque, Guatemala</span>
-              <span>💻 Backend + Android</span>
+              <span>💻 Backend + Android + Web</span>
               <span>⚡ Aprendizaje rápido</span>
             </div>
           </div>
@@ -284,30 +636,33 @@ export default function PortfolioAnderEli() {
 
         <div className="mt-12 grid lg:grid-cols-3 gap-8">
           {featuredProjects.map((project) => (
-            <ProjectCard
-              key={project.title}
-              project={project}
-              onClick={() => {
-                playClickSound()
-                setSelectedProject(project)
-              }}
-            />
+            <ProjectCard key={project.title} project={project} onClick={() => openProject(project)} />
           ))}
         </div>
       </section>
 
       <section className="max-w-7xl mx-auto px-6 py-20">
         <SectionHeader eyebrow="Más trabajos" title="Todos mis proyectos" />
+
+        <div className="mt-10 flex flex-wrap gap-3">
+          {filters.map((filter) => (
+            <button
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
+              className={`rounded-full px-5 py-2 text-sm transition ${
+                activeFilter === filter
+                  ? 'bg-cyan-400 text-black font-black'
+                  : 'border border-white/10 bg-white/5 text-gray-300 hover:border-cyan-400/40'
+              }`}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+
         <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <ProjectCard
-              key={`all-${project.title}`}
-              project={project}
-              onClick={() => {
-                playClickSound()
-                setSelectedProject(project)
-              }}
-            />
+          {filteredProjects.map((project) => (
+            <ProjectCard key={`all-${project.title}`} project={project} onClick={() => openProject(project)} />
           ))}
         </div>
       </section>
@@ -341,10 +696,11 @@ export default function PortfolioAnderEli() {
       <section className="max-w-7xl mx-auto px-6 py-20">
         <div className="glass-card p-8 md:p-12">
           <p className="text-cyan-300 uppercase tracking-[0.3em] text-sm">Terminal</p>
-          <div className="mt-6 rounded-3xl bg-black/60 border border-white/10 p-6 font-mono text-sm text-green-300 shadow-2xl">
+          <div className="mt-6 rounded-3xl bg-black/60 border border-white/10 p-6 font-mono text-sm text-green-300 shadow-2xl overflow-x-auto">
             <p>&gt; initializing profile...</p>
             <p>&gt; loading backend skills: Flask, REST APIs, MySQL</p>
             <p>&gt; loading mobile skills: Android, Retrofit</p>
+            <p>&gt; loading desktop skills: Java Swing, JDBC, POS</p>
             <p>&gt; loading deployment skills: Linux VPS, Nginx</p>
             <p className="text-cyan-300">&gt; status: ready for Junior Developer role</p>
           </div>
@@ -352,31 +708,80 @@ export default function PortfolioAnderEli() {
       </section>
 
       <section id="contacto" className="max-w-7xl mx-auto px-6 py-24">
-        <div className="glass-card p-8 md:p-14">
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <p className="text-cyan-300 uppercase tracking-[0.3em] text-sm">Contacto</p>
-              <h2 className="mt-4 text-5xl font-black leading-tight">¿Hablamos?</h2>
-              <p className="mt-6 text-gray-400 text-lg leading-relaxed">
-                Estoy listo para aplicar como Desarrollador Junior y seguir creciendo
-                dentro de un equipo profesional de desarrollo de software.
-              </p>
-              <div className="mt-8 space-y-3 text-gray-300">
-                <p>📧 albertelias924@gmail.com</p>
-                <p>💻 github.com/Ander2024-EM</p>
-                <p>📍 Guatemala</p>
-              </div>
+        <div className="glass-card p-8 md:p-14 overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-72 h-72 bg-cyan-400/10 blur-3xl rounded-full" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-500/10 blur-3xl rounded-full" />
+
+          <div className="relative z-10">
+            <p className="text-cyan-300 uppercase tracking-[0.3em] text-sm">Contacto</p>
+
+            <h2 className="mt-4 text-5xl md:text-6xl font-black leading-tight">
+              Trabajemos juntos
+            </h2>
+
+            <p className="mt-6 text-gray-400 text-lg leading-relaxed max-w-3xl">
+              Estoy disponible para oportunidades como Desarrollador Junior,
+              proyectos de software, aplicaciones Android, APIs REST, sistemas administrativos
+              y soluciones empresariales.
+            </p>
+
+            <div className="mt-12 grid md:grid-cols-2 gap-6">
+              <a
+                href="https://wa.me/50254266873"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={playClickSound}
+                className="group rounded-3xl border border-green-500/20 bg-green-500/10 p-8 hover:bg-green-500/20 transition duration-300"
+              >
+                <div className="flex items-center gap-5">
+                  <div className="text-5xl">💬</div>
+                  <div>
+                    <p className="text-green-300 text-sm uppercase tracking-widest">WhatsApp</p>
+                    <h3 className="text-3xl font-black mt-2 group-hover:text-green-300 transition">
+                      5426-6873
+                    </h3>
+                    <p className="text-gray-400 mt-2">
+                      Haz clic para escribirme directamente.
+                    </p>
+                  </div>
+                </div>
+              </a>
+
+              <a
+                href="mailto:albertelias924@gmail.com"
+                onClick={playClickSound}
+                className="group rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-8 hover:bg-cyan-400/20 transition duration-300"
+              >
+                <div className="flex items-center gap-5">
+                  <div className="text-5xl">📧</div>
+                  <div>
+                    <p className="text-cyan-300 text-sm uppercase tracking-widest">Correo electrónico</p>
+                    <h3 className="text-xl md:text-2xl font-black mt-2 break-all group-hover:text-cyan-300 transition">
+                      albertelias924@gmail.com
+                    </h3>
+                    <p className="text-gray-400 mt-2">
+                      Disponible para oportunidades y proyectos.
+                    </p>
+                  </div>
+                </div>
+              </a>
             </div>
 
-            <form action="https://formspree.io/f/TU_ID_AQUI" method="POST" className="space-y-4">
-              <input name="name" placeholder="Nombre" className="input" required />
-              <input name="email" type="email" placeholder="Correo" className="input" required />
-              <textarea name="message" placeholder="Mensaje" rows={5} className="input resize-none" required />
-              <button type="submit" onClick={playClickSound} className="btn-primary w-full">Enviar mensaje</button>
-              <p className="text-xs text-gray-500">
-                Para activar este formulario, cambia TU_ID_AQUI por tu ID de Formspree.
-              </p>
-            </form>
+            <div className="mt-12 flex flex-wrap gap-4">
+              <a
+                href="https://github.com/Ander2024-EM"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={playClickSound}
+                className="btn-secondary"
+              >
+                GitHub
+              </a>
+
+              <a href="#proyectos" onClick={playClickSound} className="btn-primary">
+                Ver proyectos
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -385,20 +790,94 @@ export default function PortfolioAnderEli() {
         © 2026 Ander Eli — Junior Software Developer
       </footer>
 
-      {selectedProject && (
-        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl p-6 flex items-center justify-center" onClick={() => setSelectedProject(null)}>
-          <div className="max-w-5xl w-full glass-card overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            <div className="h-[420px] bg-gradient-to-br from-cyan-400/20 to-blue-600/20">
-              <img src={selectedProject.image} alt={selectedProject.title} className="h-full w-full object-contain" />
+      {selectedProject && currentGalleryItem && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-xl p-4 md:p-6 flex items-center justify-center"
+          onClick={() => setSelectedProject(null)}
+        >
+          <div
+            className="max-w-7xl w-full max-h-[94vh] glass-card overflow-hidden grid lg:grid-cols-[1.25fr_0.75fr]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bg-gradient-to-br from-cyan-400/10 to-blue-600/10 p-4 md:p-6 overflow-y-auto">
+              <div className="rounded-3xl bg-black/40 border border-white/10 overflow-hidden min-h-[320px] md:h-[560px] flex items-center justify-center">
+                <img
+                  src={currentGalleryItem.src}
+                  alt={currentGalleryItem.title}
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+
+              <div className="mt-5 grid grid-cols-3 md:grid-cols-5 gap-3">
+                {selectedProject.gallery.map((item, index) => (
+                  <button
+                    key={item.src}
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={`rounded-2xl overflow-hidden border transition bg-white/5 h-20 ${
+                      selectedImageIndex === index ? 'border-cyan-400' : 'border-white/10 hover:border-cyan-400/50'
+                    }`}
+                  >
+                    <img src={item.src} alt={item.title} className="h-full w-full object-cover" />
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="p-8">
-              <div className="flex items-start justify-between gap-6">
+
+            <div className="p-6 md:p-8 overflow-y-auto">
+              <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-cyan-300 font-semibold">{selectedProject.category}</p>
-                  <h3 className="mt-2 text-4xl font-black">{selectedProject.title}</h3>
-                  <p className="mt-4 text-gray-300 leading-relaxed">{selectedProject.description}</p>
+                  <h3 className="mt-2 text-3xl md:text-5xl font-black leading-tight">{selectedProject.title}</h3>
                 </div>
-                <button onClick={() => setSelectedProject(null)} className="btn-secondary">Cerrar</button>
+                <button onClick={() => setSelectedProject(null)} className="btn-secondary shrink-0">
+                  Cerrar
+                </button>
+              </div>
+
+              <div className="mt-8 rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-5">
+                <p className="text-sm text-cyan-200 font-bold">Recorrido actual</p>
+                <h4 className="mt-2 text-2xl font-black">{currentGalleryItem.title}</h4>
+                <p className="mt-3 text-gray-300 leading-relaxed">{currentGalleryItem.description}</p>
+              </div>
+
+              <div className="mt-8">
+                <h4 className="text-xl font-black">¿Qué hace?</h4>
+                <p className="mt-3 text-gray-400 leading-relaxed">{selectedProject.description}</p>
+              </div>
+
+              <div className="mt-8">
+                <h4 className="text-xl font-black">Objetivo</h4>
+                <p className="mt-3 text-gray-400 leading-relaxed">{selectedProject.objective}</p>
+              </div>
+
+              <div className="mt-8">
+                <h4 className="text-xl font-black">Arquitectura</h4>
+                <p className="mt-3 rounded-2xl border border-white/10 bg-black/40 p-4 font-mono text-sm text-green-300 overflow-x-auto">
+                  {selectedProject.architecture}
+                </p>
+              </div>
+
+              <div className="mt-8">
+                <h4 className="text-xl font-black">Funciones principales</h4>
+                <ul className="mt-4 space-y-3 text-gray-300">
+                  {selectedProject.features.map((feature) => (
+                    <li key={feature} className="flex gap-3">
+                      <span className="text-cyan-300">✓</span>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-8">
+                <h4 className="text-xl font-black">Tecnologías</h4>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {selectedProject.stack.map((item) => (
+                    <span key={item} className="text-xs rounded-full bg-cyan-400/10 border border-cyan-400/20 text-cyan-200 px-3 py-1">
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -407,12 +886,14 @@ export default function PortfolioAnderEli() {
 
       <style jsx global>{`
         html { scroll-behavior: smooth; }
+
         .gradient-text {
           background: linear-gradient(90deg, #22d3ee, #60a5fa, #a78bfa);
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
         }
+
         .glass-card {
           border: 1px solid rgba(255,255,255,0.10);
           background: rgba(255,255,255,0.055);
@@ -420,14 +901,17 @@ export default function PortfolioAnderEli() {
           border-radius: 2rem;
           box-shadow: 0 24px 80px rgba(0,0,0,0.28);
         }
+
         .hover-card {
           transition: transform .35s ease, border-color .35s ease, background .35s ease;
         }
+
         .hover-card:hover {
           transform: translateY(-8px);
           border-color: rgba(34,211,238,0.42);
           background: rgba(34,211,238,0.075);
         }
+
         .btn-primary {
           display: inline-flex;
           align-items: center;
@@ -440,7 +924,12 @@ export default function PortfolioAnderEli() {
           box-shadow: 0 20px 45px rgba(34,211,238,.18);
           transition: .3s ease;
         }
-        .btn-primary:hover { background: #67e8f9; transform: translateY(-2px); }
+
+        .btn-primary:hover {
+          background: #67e8f9;
+          transform: translateY(-2px);
+        }
+
         .btn-secondary {
           display: inline-flex;
           align-items: center;
@@ -452,18 +941,13 @@ export default function PortfolioAnderEli() {
           font-weight: 800;
           transition: .3s ease;
         }
-        .btn-secondary:hover { border-color: rgba(34,211,238,.5); background: rgba(34,211,238,.08); transform: translateY(-2px); }
-        .input {
-          width: 100%;
-          border-radius: 1rem;
-          border: 1px solid rgba(255,255,255,.12);
-          background: rgba(255,255,255,.06);
-          padding: 1rem 1.1rem;
-          color: white;
-          outline: none;
+
+        .btn-secondary:hover {
+          border-color: rgba(34,211,238,.5);
+          background: rgba(34,211,238,.08);
+          transform: translateY(-2px);
         }
-        .input::placeholder { color: rgba(255,255,255,.45); }
-        .input:focus { border-color: rgba(34,211,238,.55); }
+
         .particle {
           position: absolute;
           top: -10px;
@@ -474,23 +958,55 @@ export default function PortfolioAnderEli() {
           box-shadow: 0 0 18px rgba(34,211,238,.9);
           animation: floatDown linear infinite;
         }
+
         @keyframes floatDown {
-          from { transform: translateY(-20px); opacity: 0; }
-          15% { opacity: 1; }
-          to { transform: translateY(110vh); opacity: 0; }
+          from {
+            transform: translateY(-20px);
+            opacity: 0;
+          }
+
+          15% {
+            opacity: 1;
+          }
+
+          to {
+            transform: translateY(110vh);
+            opacity: 0;
+          }
         }
-        .fade-in { animation: fadeIn .8s ease both; }
-        .delay-1 { animation-delay: .18s; }
+
+        .fade-in {
+          animation: fadeIn .8s ease both;
+        }
+
+        .delay-1 {
+          animation-delay: .18s;
+        }
+
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(22px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(22px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
+
         .animate-marquee {
           animation: marquee 28s linear infinite;
         }
+
         @keyframes marquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
+          from {
+            transform: translateX(0);
+          }
+
+          to {
+            transform: translateX(-50%);
+          }
         }
       `}</style>
     </main>
@@ -500,22 +1016,29 @@ export default function PortfolioAnderEli() {
 function ProjectCard({ project, onClick }: { project: Project; onClick: () => void }) {
   return (
     <article className="glass-card overflow-hidden hover-card group cursor-pointer" onClick={onClick}>
-      <div className="h-52 bg-gradient-to-br from-cyan-400/20 to-blue-600/20 border-b border-white/10 overflow-hidden relative">
+      <div className="h-56 bg-gradient-to-br from-cyan-400/20 to-blue-600/20 border-b border-white/10 overflow-hidden relative">
         <img
           src={project.image}
           alt={project.title}
           className="h-full w-full object-cover opacity-90 group-hover:scale-105 transition duration-700"
         />
+
         <div className="absolute top-4 left-4 rounded-full bg-black/50 backdrop-blur-md border border-white/10 px-3 py-1 text-xs text-cyan-200">
           {project.status}
         </div>
+
+        <div className="absolute bottom-4 right-4 rounded-full bg-cyan-400 text-black px-4 py-2 text-xs font-black opacity-0 group-hover:opacity-100 transition">
+          Ver recorrido
+        </div>
       </div>
+
       <div className="p-7">
         <p className="text-sm text-cyan-300 font-semibold">{project.category}</p>
         <h3 className="mt-3 text-2xl font-black leading-tight">{project.title}</h3>
         <p className="mt-4 text-gray-400 leading-relaxed">{project.description}</p>
+
         <div className="mt-6 flex flex-wrap gap-2">
-          {project.stack.map((item) => (
+          {project.stack.slice(0, 5).map((item) => (
             <span key={item} className="text-xs rounded-full bg-cyan-400/10 border border-cyan-400/20 text-cyan-200 px-3 py-1">
               {item}
             </span>
