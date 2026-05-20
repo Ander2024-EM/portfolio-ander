@@ -41,6 +41,15 @@ type Project = {
   architecture: string
   features: string[]
   gallery: GalleryItem[]
+  productModule?: {
+    title: string
+    summary: string
+    highlights: {
+      label: string
+      text: string
+    }[]
+    workflow: string[]
+  }
 }
 
 type Service = {
@@ -324,7 +333,7 @@ const projects: Project[] = [
   {
     title: 'Sistema de Venta de Escritorio',
     category: 'Java Swing + MySQL',
-    image: '/screenshots/SistemVenta/sistemaVenta.png',
+    image: '/screenshots/SistemaVenta/sistemaVenta.png',
     description:
       'Sistema de escritorio para punto de venta con módulos de ventas, compras, inventario, proveedores, productos, devoluciones, sucursales, cajas y usuarios.',
     stack: ['Java', 'Swing', 'JDBC', 'MySQL/MariaDB', 'NetBeans'],
@@ -344,79 +353,79 @@ const projects: Project[] = [
     ],
     gallery: [
       {
-        src: '/screenshots/SistemVenta/Login1.png',
+        src: '/screenshots/SistemaVenta/Login1.png',
         title: 'Login con caja',
         description:
           'Inicio de sesión con correo, contraseña y selección de caja.'
       },
       {
-        src: '/screenshots/SistemVenta/Login2.png',
+        src: '/screenshots/SistemaVenta/Login2.png',
         title: 'Acceso autorizado',
         description:
           'Mensaje de bienvenida con usuario, sucursal y caja seleccionada.'
       },
       {
-        src: '/screenshots/SistemVenta/sistemaVenta.png',
+        src: '/screenshots/SistemaVenta/sistemaVenta.png',
         title: 'Panel principal',
         description:
           'Menú lateral con acceso a todos los módulos administrativos.'
       },
       {
-        src: '/screenshots/SistemVenta/NuevaVenta.png',
+        src: '/screenshots/SistemaVenta/NuevaVenta.png',
         title: 'Nueva venta',
         description:
           'Módulo POS para agregar artículos, calcular total, recibir pago y cambio.'
       },
       {
-        src: '/screenshots/SistemVenta/ventas.png',
+        src: '/screenshots/SistemaVenta/ventas.png',
         title: 'Historial de ventas',
         description:
           'Tabla de ventas con fecha, sucursal, caja, usuario, total y estado.'
       },
       {
-        src: '/screenshots/SistemVenta/Inventario.png',
+        src: '/screenshots/SistemaVenta/Inventario.png',
         title: 'Inventario',
         description:
           'Control de existencias y stock mínimo por producto.'
       },
       {
-        src: '/screenshots/SistemVenta/CrearProductos.png',
+        src: '/screenshots/SistemaVenta/CrearProductos.png',
         title: 'Productos',
         description:
           'CRUD de productos con categoría, proveedor, unidad de medida y precios.'
       },
       {
-        src: '/screenshots/SistemVenta/Compra.png',
+        src: '/screenshots/SistemaVenta/Compra.png',
         title: 'Compras',
         description:
           'Registro de compras por proveedor, factura, cantidad y total.'
       },
       {
-        src: '/screenshots/SistemVenta/Proveedores.png',
+        src: '/screenshots/SistemaVenta/Proveedores.png',
         title: 'Proveedores',
         description:
           'Administración de proveedores con NIT, teléfono, dirección y estado.'
       },
       {
-        src: '/screenshots/SistemVenta/Devoluciones.png',
+        src: '/screenshots/SistemaVenta/Devoluciones.png',
         title: 'Devoluciones',
         description:
           'Control de devoluciones con venta asociada, motivo y acción tomada.'
       },
       {
-        src: '/screenshots/SistemVenta/Sucursales.png',
+        src: '/screenshots/SistemaVenta/Sucursales.png',
         title: 'Sucursales',
         description:
           'Gestión de sucursales con dirección, teléfono y estado.'
       },
       {
-        src: '/screenshots/SistemVenta/cahas.png',
+        src: '/screenshots/SistemaVenta/cahas.png',
         title: 'Cajas',
         description:
           'Administración de cajas por sucursal y estado.'
       },
       {
-        src: '/screenshots/SistemVenta/Usuarios.png',
+        src: '/screenshots/SistemaVenta/Usuarios.png',
         title: 'Usuarios',
         description:
           'Gestión de usuarios con nombre, correo, rol, sucursal y estado.'
@@ -428,33 +437,64 @@ const projects: Project[] = [
     category: 'Aplicación Web',
     image: '/screenshots/WebProductos/web-productos.png',
     description:
-      'Aplicación web para gestionar productos con login, carga de imágenes, búsqueda, filtros, exportación, comentarios y control de estado.',
+      'Aplicación web administrativa para manejar un catálogo de productos con autenticación, imágenes, precios, estados, búsqueda, filtros, comentarios y exportación.',
     stack: ['HTML', 'CSS', 'JavaScript', 'Flask/Python', 'SQLite/MySQL'],
-    status: 'Web app',
+    status: 'Módulo de productos',
     objective:
-      'Lo hice para practicar desarrollo web completo con autenticación, formularios, manejo de imágenes, filtros y comentarios por producto.',
+      'Lo desarrollé para practicar un flujo CRUD completo: registrar productos, mantener un catálogo visual, consultar información rápido y dejar acciones listas para operar inventario básico.',
     architecture:
-      'Frontend Web → Backend → Base de datos → Imágenes → Comentarios → Exportación',
+      'Login → Panel de productos → CRUD → Búsqueda/Filtros → Comentarios → Exportación',
     features: [
-      'Login de usuario.',
-      'Agregar productos con nombre, precio e imagen.',
-      'Buscar, filtrar y ordenar productos.',
-      'Editar, deshabilitar y eliminar productos.',
-      'Sistema de comentarios por producto.',
-      'Exportación de datos.'
+      'Inicio de sesión para proteger el panel administrativo.',
+      'Registro de productos con nombre, precio, imagen y estado.',
+      'Catálogo visual con tarjetas de producto, acciones rápidas e información clave.',
+      'Búsqueda, filtros y ordenamiento para encontrar productos con menos clics.',
+      'Edición, deshabilitación y eliminación desde el mismo panel.',
+      'Comentarios por producto para dejar observaciones operativas.',
+      'Exportación de información para reportes o respaldo.'
     ],
+    productModule: {
+      title: 'Módulo de productos completo',
+      summary:
+        'El flujo queda presentado como un módulo administrativo real: entrada protegida, alta de productos, consulta del catálogo y acciones de mantenimiento sobre cada registro.',
+      highlights: [
+        {
+          label: 'Registro',
+          text: 'Formulario pensado para capturar nombre, precio, imagen y estado del producto.'
+        },
+        {
+          label: 'Catálogo',
+          text: 'Vista principal con productos, imagen, precio, estado, comentarios y acciones.'
+        },
+        {
+          label: 'Operación',
+          text: 'Búsqueda, filtros, ordenamiento y exportación para trabajar con listas grandes.'
+        },
+        {
+          label: 'Mantenimiento',
+          text: 'Editar, deshabilitar o eliminar productos sin salir del panel.'
+        }
+      ],
+      workflow: [
+        'Iniciar sesión en el panel.',
+        'Registrar o actualizar productos.',
+        'Buscar y filtrar el catálogo.',
+        'Agregar comentarios o revisar estado.',
+        'Exportar datos cuando se necesite respaldo.'
+      ]
+    },
     gallery: [
       {
         src: '/screenshots/WebProductos/Login.png',
         title: 'Login web',
         description:
-          'Inicio de sesión para acceder al panel administrativo.'
+          'Entrada protegida para separar el panel administrativo del acceso público.'
       },
       {
         src: '/screenshots/WebProductos/web-productos.png',
-        title: 'Panel de productos',
+        title: 'Panel completo de productos',
         description:
-          'Gestión de productos con imagen, precio, estado, comentarios, filtros y acciones.'
+          'Vista central del módulo: productos con imagen, precio, estado, comentarios, filtros, exportación y acciones de mantenimiento.'
       }
     ]
   }
@@ -863,6 +903,10 @@ export default function PortfolioAnderEli() {
               <ProjectDetail title="¿Qué hace?" text={selectedProject.description} />
               <ProjectDetail title="Objetivo" text={selectedProject.objective} />
 
+              {selectedProject.productModule && (
+                <ProductModuleSection module={selectedProject.productModule} />
+              )}
+
               <div className="mt-8">
                 <h4 className="text-xl font-black">Arquitectura</h4>
                 <p className="mt-3 overflow-x-auto rounded-lg border border-white/10 bg-black/40 p-4 font-mono text-sm text-emerald-200">
@@ -1085,6 +1129,39 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
   )
 }
 
+function ProductModuleSection({ module }: { module: NonNullable<Project['productModule']> }) {
+  return (
+    <section className="mt-8 rounded-lg border border-amber-300/20 bg-amber-300/10 p-5">
+      <p className="text-sm font-bold uppercase tracking-[0.18em] text-amber-200">Módulo de productos</p>
+      <h4 className="mt-3 text-2xl font-black">{module.title}</h4>
+      <p className="mt-3 leading-relaxed text-zinc-300">{module.summary}</p>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        {module.highlights.map((item) => (
+          <div key={item.label} className="rounded-lg border border-white/10 bg-black/25 p-4">
+            <p className="font-bold text-amber-200">{item.label}</p>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-400">{item.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6">
+        <p className="font-bold">Flujo del módulo</p>
+        <ol className="mt-3 space-y-2 text-sm text-zinc-300">
+          {module.workflow.map((step, index) => (
+            <li key={step} className="flex gap-3">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-300 text-xs font-black text-black">
+                {index + 1}
+              </span>
+              <span className="pt-0.5">{step}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )
+}
+
 function ProjectDetail({ title, text }: { title: string; text: string }) {
   return (
     <div className="mt-8">
@@ -1102,3 +1179,4 @@ function SectionHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
     </div>
   )
 }
+
