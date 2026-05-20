@@ -882,10 +882,10 @@ export default function PortfolioAnderEli() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="project-detail-title"
-            className="project-modal surface-card relative grid h-[calc(100dvh-1.5rem)] w-full max-w-7xl overflow-y-auto overscroll-contain sm:h-[calc(100dvh-2rem)] lg:h-[min(900px,calc(100dvh-3rem))] lg:grid-cols-[minmax(0,1.18fr)_minmax(380px,0.82fr)] lg:overflow-hidden"
+            className="project-modal surface-card relative grid h-[calc(100dvh-1.5rem)] min-h-0 w-full max-w-7xl overflow-y-auto overscroll-contain sm:h-[calc(100dvh-2rem)] lg:h-[min(900px,calc(100dvh-3rem))] lg:grid-cols-[minmax(0,1.18fr)_minmax(380px,0.82fr)] lg:overflow-hidden"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="border-b border-white/10 bg-black/25 p-4 pt-16 sm:p-5 sm:pt-16 md:p-6 md:pt-6 lg:h-full lg:overflow-y-auto lg:border-b-0 lg:border-r">
+            <div className="border-b border-white/10 bg-black/25 p-4 pt-16 sm:p-5 sm:pt-16 md:p-6 md:pt-6 lg:min-h-0 lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:border-b-0 lg:border-r">
               <div className="relative flex h-[42vh] min-h-[250px] max-h-[520px] items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-black/40 sm:h-[48vh] md:h-[560px] lg:h-[min(560px,calc(100dvh-14rem))] lg:min-h-[360px]">
                 <Image
                   src={currentGalleryItem.src}
@@ -914,7 +914,7 @@ export default function PortfolioAnderEli() {
               </div>
             </div>
 
-            <div className="min-w-0 p-5 pt-7 sm:p-6 md:p-8 lg:h-full lg:overflow-y-auto lg:pr-10">
+            <div className="min-w-0 p-5 pt-7 sm:p-6 md:p-8 lg:min-h-0 lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:pr-10">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 pr-12 sm:pr-14 lg:pr-2">
                   <p className="font-semibold text-emerald-300">{selectedProject.category}</p>
