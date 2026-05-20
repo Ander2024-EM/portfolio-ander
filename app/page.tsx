@@ -635,19 +635,21 @@ export default function PortfolioAnderEli() {
         </nav>
       </header>
 
-      <section id="inicio" className="mx-auto grid max-w-7xl gap-12 px-5 pb-16 pt-20 md:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pb-24 lg:pt-28">
-        <div className="fade-in min-w-0">
-          <div className="inline-flex items-center gap-3 rounded-lg border border-emerald-300/30 bg-emerald-300/10 px-4 py-2 text-sm font-medium text-emerald-100">
+      <section id="inicio" className="hero-section relative mx-auto grid max-w-7xl gap-12 overflow-hidden px-5 pb-16 pt-20 md:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pb-24 lg:pt-28">
+        <div className="hero-ambient" aria-hidden="true" />
+
+        <div className="premium-reveal relative z-10 min-w-0">
+          <div className="premium-pill inline-flex items-center gap-3 rounded-lg border border-emerald-300/30 bg-emerald-300/10 px-4 py-2 text-sm font-medium text-emerald-100">
             <span className="h-2 w-2 rounded-full bg-emerald-300" />
             Disponible para puesto de Desarrollador Junior
           </div>
 
-          <h1 className="mt-8 max-w-4xl break-words text-5xl font-black leading-none tracking-tight sm:text-6xl md:text-8xl">
+          <h1 className="hero-title mt-8 max-w-4xl break-words text-5xl font-black leading-none tracking-tight sm:text-6xl md:text-8xl">
             Ander Eli
             <span className="block gradient-text">Software Developer</span>
           </h1>
 
-          <p className="mt-8 max-w-2xl break-words text-lg leading-relaxed text-zinc-300 md:text-xl">
+          <p className="hero-copy mt-8 max-w-2xl break-words text-lg leading-relaxed text-zinc-300 md:text-xl">
             Estudiante de Ingeniería en Sistemas con experiencia práctica creando APIs REST,
             aplicaciones Android, sistemas administrativos, bases de datos y despliegues en servidor.
           </p>
@@ -678,7 +680,7 @@ export default function PortfolioAnderEli() {
           </div>
         </div>
 
-        <aside className="surface-card fade-in delay-1 min-w-0 p-6 lg:p-8">
+        <aside className="hero-profile-card surface-card premium-reveal delay-1 relative z-10 min-w-0 p-6 lg:p-8">
           <div className="flex items-start justify-between gap-5 border-b border-white/10 pb-6">
             <div className="min-w-0">
               <p className="text-sm font-medium text-zinc-400">Perfil técnico</p>
@@ -705,6 +707,17 @@ export default function PortfolioAnderEli() {
               inventario, ventas y reportes empresariales.
             </p>
           </div>
+
+          <div className="mt-8 grid gap-3 border-t border-white/10 pt-6 text-sm text-zinc-400">
+            <div className="flex items-center justify-between gap-4">
+              <span>Producto</span>
+              <span className="font-semibold text-zinc-200">Sistemas reales</span>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <span>Enfoque</span>
+              <span className="font-semibold text-zinc-200">Backend + Mobile</span>
+            </div>
+          </div>
         </aside>
       </section>
 
@@ -720,7 +733,7 @@ export default function PortfolioAnderEli() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-20 md:px-6">
+      <section className="premium-section mx-auto max-w-7xl px-5 py-20 md:px-6">
         <SectionHeader eyebrow="Servicios" title="Lo que puedo aportar" />
         <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {services.map((service) => (
@@ -729,7 +742,7 @@ export default function PortfolioAnderEli() {
         </div>
       </section>
 
-      <section id="proyectos" className="border-y border-white/10 bg-white/[0.025]">
+      <section id="proyectos" className="premium-section border-y border-white/10 bg-white/[0.025]">
         <div className="mx-auto max-w-7xl px-5 py-20 md:px-6">
           <SectionHeader eyebrow="Portafolio" title="Proyectos destacados" />
 
@@ -741,7 +754,7 @@ export default function PortfolioAnderEli() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-20 md:px-6">
+      <section className="premium-section mx-auto max-w-7xl px-5 py-20 md:px-6">
         <SectionHeader eyebrow="Más trabajos" title="Todos mis proyectos" />
 
         <div className="mt-10 flex flex-wrap gap-3">
@@ -885,7 +898,7 @@ export default function PortfolioAnderEli() {
             className="project-modal surface-card relative grid h-[calc(100dvh-1.5rem)] min-h-0 w-full max-w-7xl overflow-y-auto overscroll-contain sm:h-[calc(100dvh-2rem)] lg:h-[min(900px,calc(100dvh-3rem))] lg:grid-cols-[minmax(0,1.18fr)_minmax(380px,0.82fr)] lg:overflow-hidden"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="border-b border-white/10 bg-black/25 p-4 pt-16 sm:p-5 sm:pt-16 md:p-6 md:pt-6 lg:min-h-0 lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:border-b-0 lg:border-r">
+            <div className="project-gallery-panel border-b border-white/10 bg-black/25 p-4 pt-16 sm:p-5 sm:pt-16 md:p-6 md:pt-6 lg:min-h-0 lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:border-b-0 lg:border-r">
               <div className="relative flex h-[42vh] min-h-[250px] max-h-[520px] items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-black/40 sm:h-[48vh] md:h-[560px] lg:h-[min(560px,calc(100dvh-14rem))] lg:min-h-[360px]">
                 <Image
                   src={currentGalleryItem.src}
@@ -914,35 +927,40 @@ export default function PortfolioAnderEli() {
               </div>
             </div>
 
-            <div className="min-w-0 p-5 pt-7 sm:p-6 md:p-8 lg:min-h-0 lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:pr-10">
-              <div className="flex items-start justify-between gap-4">
+            <div className="project-editorial-panel min-w-0 p-5 pt-7 sm:p-6 md:p-8 lg:min-h-0 lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:pr-10">
+              <div className="project-detail-header flex items-start justify-between gap-4 rounded-lg border border-white/10 bg-black/20 p-5">
                 <div className="min-w-0 pr-12 sm:pr-14 lg:pr-2">
-                  <p className="font-semibold text-emerald-300">{selectedProject.category}</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-xs font-bold text-emerald-100">
+                      {selectedProject.status}
+                    </span>
+                    <span className="text-sm font-semibold text-emerald-300">{selectedProject.category}</span>
+                  </div>
                   <h3 id="project-detail-title" className="mt-2 break-words text-3xl font-black leading-tight md:text-5xl">{selectedProject.title}</h3>
+                  <p className="mt-4 max-w-2xl text-sm leading-relaxed text-zinc-400 md:text-base">{selectedProject.objective}</p>
                 </div>
               </div>
 
-              <div className="mt-7 rounded-lg border border-emerald-300/20 bg-emerald-300/10 p-5">
+              <div className="project-spotlight mt-7 rounded-lg border border-emerald-300/20 bg-emerald-300/10 p-5">
                 <p className="text-sm font-bold text-emerald-100">Recorrido actual</p>
                 <h4 className="mt-2 text-2xl font-black">{currentGalleryItem.title}</h4>
                 <p className="mt-3 leading-relaxed text-zinc-300">{currentGalleryItem.description}</p>
               </div>
 
               <ProjectDetail title="¿Qué hace?" text={selectedProject.description} />
-              <ProjectDetail title="Objetivo" text={selectedProject.objective} />
 
               {selectedProject.productModule && (
                 <ProductModuleSection module={selectedProject.productModule} />
               )}
 
-              <div className="mt-8">
+              <div className="project-copy-block mt-8">
                 <h4 className="text-xl font-black">Arquitectura</h4>
                 <p className="mt-3 overflow-x-auto rounded-lg border border-white/10 bg-black/40 p-4 font-mono text-sm text-emerald-200">
                   {selectedProject.architecture}
                 </p>
               </div>
 
-              <div className="mt-8">
+              <div className="project-copy-block mt-8">
                 <h4 className="text-xl font-black">Funciones principales</h4>
                 <ul className="mt-4 space-y-3 text-zinc-300">
                   {selectedProject.features.map((feature) => (
@@ -954,7 +972,7 @@ export default function PortfolioAnderEli() {
                 </ul>
               </div>
 
-              <div className="mt-8 pb-6">
+              <div className="project-copy-block mt-8 pb-6">
                 <h4 className="text-xl font-black">Tecnologías</h4>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {selectedProject.stack.map((item) => (
@@ -970,7 +988,27 @@ export default function PortfolioAnderEli() {
       )}
 
       <style jsx global>{`
-        html { scroll-behavior: smooth; }
+        html {
+          scroll-behavior: smooth;
+          scroll-padding-top: 5rem;
+        }
+
+        .hero-section {
+          isolation: isolate;
+        }
+
+        .hero-ambient {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            linear-gradient(115deg, rgba(110,231,183,0.13), transparent 42%),
+            linear-gradient(235deg, rgba(103,232,249,0.12), transparent 48%),
+            linear-gradient(180deg, rgba(255,255,255,0.065), transparent 36%);
+          -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,0.18) 78%, transparent);
+          mask-image: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,0.18) 78%, transparent);
+          opacity: .82;
+        }
 
         .gradient-text {
           background: linear-gradient(90deg, #6ee7b7, #67e8f9, #fbbf24);
@@ -979,22 +1017,145 @@ export default function PortfolioAnderEli() {
           color: transparent;
         }
 
+        .premium-pill {
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.16),
+            0 18px 50px rgba(16,185,129,0.12);
+        }
+
+        .premium-pill span {
+          box-shadow: 0 0 24px rgba(110,231,183,0.72);
+        }
+
+        .hero-title {
+          letter-spacing: 0;
+          text-wrap: balance;
+        }
+
+        .hero-copy {
+          text-wrap: pretty;
+        }
+
         .surface-card {
           border: 1px solid rgba(255,255,255,0.10);
           background: rgba(255,255,255,0.055);
           backdrop-filter: blur(18px);
           border-radius: 0.5rem;
-          box-shadow: 0 24px 70px rgba(0,0,0,0.24);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.055),
+            0 24px 70px rgba(0,0,0,0.24);
         }
 
         .hover-card {
-          transition: transform .25s ease, border-color .25s ease, background .25s ease;
+          transition: transform .28s ease, border-color .28s ease, background .28s ease, box-shadow .28s ease;
         }
 
         .hover-card:hover {
           transform: translateY(-4px);
           border-color: rgba(110,231,183,0.45);
           background: rgba(110,231,183,0.075);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.07),
+            0 30px 85px rgba(0,0,0,0.32);
+        }
+
+        .hero-profile-card {
+          overflow: hidden;
+        }
+
+        .hero-profile-card::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: linear-gradient(145deg, rgba(255,255,255,0.13), transparent 42%, rgba(103,232,249,0.055));
+          pointer-events: none;
+        }
+
+        .hero-profile-card > * {
+          position: relative;
+          z-index: 1;
+        }
+
+        .premium-section {
+          position: relative;
+          isolation: isolate;
+        }
+
+        .premium-section::before {
+          content: "";
+          position: absolute;
+          left: 1.25rem;
+          right: 1.25rem;
+          top: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(110,231,183,0.22), rgba(103,232,249,0.16), transparent);
+          pointer-events: none;
+          opacity: .75;
+        }
+
+        .premium-reveal {
+          animation: premiumReveal .72s cubic-bezier(.2,.8,.2,1) both;
+        }
+
+        .project-card {
+          position: relative;
+          isolation: isolate;
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.055),
+            0 26px 72px rgba(0,0,0,0.25);
+        }
+
+        .project-card::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          border-radius: inherit;
+          background: linear-gradient(135deg, rgba(110,231,183,0.10), transparent 34%, rgba(103,232,249,0.06));
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity .3s ease;
+        }
+
+        .project-card > * {
+          position: relative;
+          z-index: 2;
+        }
+
+        .project-card-media::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          background: linear-gradient(180deg, transparent 46%, rgba(0,0,0,0.44));
+          pointer-events: none;
+        }
+
+        .project-card-sheen {
+          position: absolute;
+          inset: 0;
+          z-index: 2;
+          background: linear-gradient(105deg, transparent 34%, rgba(255,255,255,0.17), transparent 66%);
+          opacity: 0;
+          pointer-events: none;
+          transform: translateX(-120%);
+          transition: transform .82s cubic-bezier(.2,.8,.2,1), opacity .3s ease;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          .project-card:hover {
+            transform: translateY(-6px);
+          }
+
+          .project-card:hover::before {
+            opacity: 1;
+          }
+
+          .project-card:hover .project-card-sheen {
+            opacity: .55;
+            transform: translateX(120%);
+          }
         }
 
         .project-modal-overlay {
@@ -1004,6 +1165,49 @@ export default function PortfolioAnderEli() {
         .project-modal {
           animation: modalPanel .24s cubic-bezier(.2,.8,.2,1) both;
           scrollbar-gutter: stable;
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.08),
+            0 40px 120px rgba(0,0,0,0.52);
+        }
+
+        .project-gallery-panel {
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18)),
+            rgba(0,0,0,0.25);
+        }
+
+        .project-editorial-panel {
+          background: linear-gradient(180deg, rgba(255,255,255,0.035), transparent 44%);
+        }
+
+        .project-detail-header {
+          position: relative;
+          overflow: hidden;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        .project-detail-header::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(110,231,183,0.08), transparent 48%, rgba(103,232,249,0.045));
+          pointer-events: none;
+        }
+
+        .project-detail-header > * {
+          position: relative;
+          z-index: 1;
+        }
+
+        .project-spotlight {
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.06),
+            0 18px 54px rgba(16,185,129,0.08);
+        }
+
+        .project-copy-block {
+          border-top: 1px solid rgba(255,255,255,0.08);
+          padding-top: 1.75rem;
         }
 
         .project-thumb {
@@ -1089,6 +1293,20 @@ export default function PortfolioAnderEli() {
           }
         }
 
+        @keyframes premiumReveal {
+          from {
+            opacity: 0;
+            transform: translateY(18px) scale(.992);
+            filter: blur(6px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+          }
+        }
+
         @keyframes modalBackdrop {
           from {
             opacity: 0;
@@ -1153,7 +1371,7 @@ function ServiceCard({ service }: { service: Service }) {
   const Icon = service.icon
 
   return (
-    <article className="surface-card hover-card p-6">
+    <article className="surface-card hover-card premium-reveal p-6">
       <Icon className="h-9 w-9 text-emerald-300" />
       <h3 className="mt-5 text-xl font-bold">{service.title}</h3>
       <p className="mt-4 leading-relaxed text-zinc-400">{service.description}</p>
@@ -1165,10 +1383,10 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
   return (
     <button
       type="button"
-      className="surface-card hover-card group w-full overflow-hidden text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+      className="project-card surface-card hover-card group w-full overflow-hidden text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
       onClick={onClick}
     >
-      <span className="relative block h-56 overflow-hidden border-b border-white/10 bg-black/30">
+      <span className="project-card-media relative block h-60 overflow-hidden border-b border-white/10 bg-black/30">
         <Image
           src={project.image}
           alt={`Captura de ${project.title}`}
@@ -1176,19 +1394,23 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
           sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           className="object-cover opacity-90 transition duration-700 group-hover:scale-105"
         />
+        <span className="project-card-sheen" aria-hidden="true" />
 
-        <span className="absolute left-4 top-4 rounded-lg border border-white/10 bg-black/60 px-3 py-1 text-xs font-medium text-emerald-100 backdrop-blur-md">
+        <span className="absolute left-4 top-4 z-10 rounded-full border border-white/10 bg-black/60 px-3 py-1 text-xs font-medium text-emerald-100 backdrop-blur-md">
           {project.status}
         </span>
 
-        <span className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-lg bg-emerald-300 px-3 py-2 text-xs font-black text-black opacity-0 transition group-hover:opacity-100">
+        <span className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-lg bg-emerald-300 px-3 py-2 text-xs font-black text-black opacity-0 shadow-xl shadow-emerald-950/30 transition group-hover:opacity-100">
           Ver recorrido
           <ExternalLink className="h-3.5 w-3.5" />
         </span>
       </span>
 
       <span className="block p-6">
-        <span className="text-sm font-semibold text-emerald-300">{project.category}</span>
+        <span className="flex flex-wrap items-center justify-between gap-3">
+          <span className="text-sm font-semibold text-emerald-300">{project.category}</span>
+          <span className="text-xs font-medium text-zinc-500">{project.gallery.length} pantallas</span>
+        </span>
         <span className="mt-3 block text-2xl font-black leading-tight">{project.title}</span>
         <span className="mt-4 block leading-relaxed text-zinc-400">{project.description}</span>
 
@@ -1239,7 +1461,7 @@ function ProductModuleSection({ module }: { module: NonNullable<Project['product
 
 function ProjectDetail({ title, text }: { title: string; text: string }) {
   return (
-    <div className="mt-8">
+    <div className="project-copy-block mt-8">
       <h4 className="text-xl font-black">{title}</h4>
       <p className="mt-3 leading-relaxed text-zinc-400">{text}</p>
     </div>
