@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
 import {
   ArrowRight,
   BriefcaseBusiness,
@@ -12,6 +13,7 @@ import {
   ExternalLink,
   GitBranch,
   Mail,
+  Menu,
   MapPin,
   MessageCircle,
   MonitorSmartphone,
@@ -543,12 +545,53 @@ const timeline = [
 
 const filters = ['Todos', 'Android', 'Java Swing', 'Web', 'Backend']
 const featuredProjects = projects.slice(0, 3)
+const navigationItems = [
+  { href: '#inicio', id: 'inicio', label: 'Inicio' },
+  { href: '#proyectos', id: 'proyectos', label: 'Proyectos' },
+  { href: '#stack', id: 'stack', label: 'Stack' },
+  { href: '#experiencia', id: 'experiencia', label: 'Experiencia' },
+  { href: '#contacto', id: 'contacto', label: 'Contacto' }
+]
+
+const premiumEase = [0.22, 1, 0.36, 1] as const
+const revealViewport = { once: true, amount: 0.18 }
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 28, filter: 'blur(8px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.72, ease: premiumEase }
+  }
+}
+
+const staggerGroup = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.08
+    }
+  }
+}
+
+const sectionReveal = {
+  hidden: { opacity: 0, y: 34 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.72, ease: premiumEase }
+  }
+}
 
 export default function PortfolioAnderEli() {
   const [soundOn, setSoundOn] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [activeFilter, setActiveFilter] = useState('Todos')
+  const [activeSection, setActiveSection] = useState('inicio')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === 'Todos') return projects
@@ -560,6 +603,50 @@ export default function PortfolioAnderEli() {
   }, [activeFilter])
 
   const currentGalleryItem = selectedProject?.gallery[selectedImageIndex]
+
+  useEffect(() => {
+    let ticking = false
+
+    function updateActiveSection() {
+      const checkpoint = window.scrollY + 140
+      const currentSection = navigationItems.reduce((current, item) => {
+        const section = document.getElementById(item.id)
+        if (!section) return current
+
+        return section.offsetTop <= checkpoint ? item.id : current
+      }, 'inicio')
+
+      setActiveSection(currentSection)
+      ticking = false
+    }
+
+    function requestUpdate() {
+      if (ticking) return
+      ticking = true
+      window.requestAnimationFrame(updateActiveSection)
+    }
+
+    updateActiveSection()
+    window.addEventListener('scroll', requestUpdate, { passive: true })
+    window.addEventListener('resize', requestUpdate)
+
+    return () => {
+      window.removeEventListener('scroll', requestUpdate)
+      window.removeEventListener('resize', requestUpdate)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') setMobileMenuOpen(false)
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [mobileMenuOpen])
 
   useEffect(() => {
     if (!selectedProject) return
@@ -598,6 +685,7 @@ export default function PortfolioAnderEli() {
 
   function openProject(project: Project) {
     playClickSound()
+    setMobileMenuOpen(false)
     setSelectedProject(project)
     setSelectedImageIndex(0)
   }
@@ -607,38 +695,150 @@ export default function PortfolioAnderEli() {
     setSelectedProject(null)
   }
 
+  function handleNavClick(id: string) {
+    playClickSound()
+    setActiveSection(id)
+    setMobileMenuOpen(false)
+  }
+
   return (
+    <MotionConfig reducedMotion="user">
     <main className="min-h-screen overflow-hidden bg-[#090a0f] text-white selection:bg-emerald-300 selection:text-black">
       <div className="fixed inset-0 -z-10 bg-[linear-gradient(120deg,rgba(45,212,191,0.10),transparent_28%,rgba(245,158,11,0.08)_58%,transparent_76%),linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:100%_100%,44px_44px,44px_44px]" />
 
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#090a0f]/85 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 md:px-6">
-          <a href="#inicio" className="text-xl font-black tracking-tight">
-            Ander<span className="text-emerald-300">.dev</span>
+      <motion.header
+        className="nav-shell sticky top-0 z-50 border-b border-white/10 bg-[#090a0f]/85 backdrop-blur-xl"
+        initial={{ y: -18, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.55, ease: premiumEase }}
+      >
+        <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-3 md:px-6">
+          <a
+            href="#inicio"
+            onClick={() => handleNavClick('inicio')}
+            className="nav-brand group inline-flex items-center gap-3 text-xl font-black tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-300"
+            aria-label="Ir al inicio"
+          >
+            <span className="nav-brand-mark" aria-hidden="true">A</span>
+            <span>Ander<span className="text-emerald-300">.dev</span></span>
           </a>
 
-          <div className="hidden gap-7 text-sm text-zinc-300 md:flex">
-            <a href="#proyectos" className="transition hover:text-emerald-300">Proyectos</a>
-            <a href="#stack" className="transition hover:text-emerald-300">Stack</a>
-            <a href="#experiencia" className="transition hover:text-emerald-300">Experiencia</a>
-            <a href="#contacto" className="transition hover:text-emerald-300">Contacto</a>
+          <div className="nav-pill hidden items-center gap-1 rounded-full border border-white/10 bg-white/[0.045] p-1 text-sm text-zinc-300 shadow-2xl shadow-black/20 md:flex">
+            {navigationItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={() => handleNavClick(item.id)}
+                aria-current={activeSection === item.id ? 'page' : undefined}
+                className={`nav-link rounded-full px-3 py-2 font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 lg:px-4 ${
+                  activeSection === item.id ? 'is-active text-white' : 'text-zinc-300 hover:text-white'
+                }`}
+              >
+                {activeSection === item.id && (
+                  <motion.span
+                    layoutId="desktop-nav-active"
+                    className="nav-active-indicator"
+                    transition={{ duration: 0.32, ease: premiumEase }}
+                  />
+                )}
+                <span className="relative z-10">{item.label}</span>
+              </a>
+            ))}
           </div>
 
-          <button
-            type="button"
-            onClick={() => setSoundOn(!soundOn)}
-            aria-label={soundOn ? 'Desactivar sonido' : 'Activar sonido'}
-            className="btn-icon"
-          >
-            {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-          </button>
+          <div className="flex items-center gap-2">
+            <a
+              href="#contacto"
+              onClick={() => handleNavClick('contacto')}
+              className="nav-cta hidden items-center gap-2 rounded-full border border-emerald-300/25 bg-emerald-300/10 px-4 py-2 text-sm font-black text-emerald-100 transition hover:border-emerald-300/50 hover:bg-emerald-300 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 sm:inline-flex"
+            >
+              Hablemos
+              <ArrowRight className="h-3.5 w-3.5" />
+            </a>
+
+            <button
+              type="button"
+              onClick={() => {
+                playClickSound()
+                setSoundOn(!soundOn)
+              }}
+              aria-label={soundOn ? 'Desactivar sonido' : 'Activar sonido'}
+              className="btn-icon nav-icon-button"
+            >
+              {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                playClickSound()
+                setMobileMenuOpen((isOpen) => !isOpen)
+              }}
+              aria-label={mobileMenuOpen ? 'Cerrar navegación' : 'Abrir navegación'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
+              className="btn-icon nav-icon-button nav-menu-toggle"
+            >
+              {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </button>
+          </div>
         </nav>
-      </header>
 
-      <section id="inicio" className="hero-section relative mx-auto grid max-w-7xl gap-12 overflow-hidden px-5 pb-16 pt-20 md:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pb-24 lg:pt-28">
-        <div className="hero-ambient" aria-hidden="true" />
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              id="mobile-navigation"
+              className="nav-mobile-panel border-t border-white/10 bg-[#090a0f]/96 px-5 pb-5 pt-2 shadow-2xl shadow-black/40 backdrop-blur-xl md:hidden"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22, ease: premiumEase }}
+            >
+              <motion.div
+                className="mx-auto grid max-w-7xl gap-2"
+                variants={staggerGroup}
+                initial="hidden"
+                animate="visible"
+              >
+                {navigationItems.map((item) => (
+                  <motion.a
+                    key={`mobile-${item.href}`}
+                    href={item.href}
+                    onClick={() => handleNavClick(item.id)}
+                    aria-current={activeSection === item.id ? 'page' : undefined}
+                    className={`nav-mobile-link flex items-center justify-between rounded-lg border px-4 py-3 text-sm font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 ${
+                      activeSection === item.id
+                        ? 'border-emerald-300/30 bg-emerald-300/10 text-emerald-100'
+                        : 'border-white/10 bg-white/[0.035] text-zinc-300 hover:border-emerald-300/35 hover:text-white'
+                    }`}
+                    variants={fadeUp}
+                  >
+                    {item.label}
+                    <span className="h-1.5 w-1.5 rounded-full bg-current opacity-60" aria-hidden="true" />
+                  </motion.a>
+                ))}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.header>
 
-        <div className="premium-reveal relative z-10 min-w-0">
+      <motion.section
+        id="inicio"
+        className="hero-section relative mx-auto grid max-w-7xl gap-12 overflow-hidden px-5 pb-16 pt-20 md:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pb-24 lg:pt-28"
+        variants={staggerGroup}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div
+          className="hero-ambient"
+          aria-hidden="true"
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 0.82, scale: 1 }}
+          transition={{ duration: 1.2, ease: premiumEase }}
+        />
+
+        <motion.div className="relative z-10 min-w-0" variants={fadeUp}>
           <div className="premium-pill inline-flex items-center gap-3 rounded-lg border border-emerald-300/30 bg-emerald-300/10 px-4 py-2 text-sm font-medium text-emerald-100">
             <span className="h-2 w-2 rounded-full bg-emerald-300" />
             Disponible para puesto de Desarrollador Junior
@@ -654,7 +854,7 @@ export default function PortfolioAnderEli() {
             aplicaciones Android, sistemas administrativos, bases de datos y despliegues en servidor.
           </p>
 
-          <div className="mt-10 flex flex-wrap gap-3">
+          <motion.div className="mt-10 flex flex-wrap gap-3" variants={staggerGroup}>
             <a href="#proyectos" onClick={playClickSound} className="btn-primary">
               Ver proyectos
               <ArrowRight className="h-4 w-4" />
@@ -671,16 +871,20 @@ export default function PortfolioAnderEli() {
               <GitBranch className="h-4 w-4" />
               GitHub
             </a>
-          </div>
+          </motion.div>
 
-          <div className="mt-10 grid gap-3 text-sm text-zinc-400 sm:grid-cols-3">
+          <motion.div className="mt-10 grid gap-3 text-sm text-zinc-400 sm:grid-cols-3" variants={staggerGroup}>
             <ProfileFact icon={MapPin} text="Coatepeque, Guatemala" />
             <ProfileFact icon={MonitorSmartphone} text="Backend + Android + Web" />
             <ProfileFact icon={Zap} text="Aprendizaje rápido" />
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <aside className="hero-profile-card surface-card premium-reveal delay-1 relative z-10 min-w-0 p-6 lg:p-8">
+        <motion.aside
+          className="hero-profile-card surface-card relative z-10 min-w-0 p-6 lg:p-8"
+          variants={fadeUp}
+          whileHover={{ y: -4, transition: { duration: 0.28, ease: premiumEase } }}
+        >
           <div className="flex items-start justify-between gap-5 border-b border-white/10 pb-6">
             <div className="min-w-0">
               <p className="text-sm font-medium text-zinc-400">Perfil técnico</p>
@@ -718,8 +922,8 @@ export default function PortfolioAnderEli() {
               <span className="font-semibold text-zinc-200">Backend + Mobile</span>
             </div>
           </div>
-        </aside>
-      </section>
+        </motion.aside>
+      </motion.section>
 
       <section className="border-y border-white/10 bg-white/[0.025] py-5">
         <div className="mx-auto max-w-7xl overflow-hidden px-5 md:px-6">
@@ -733,28 +937,56 @@ export default function PortfolioAnderEli() {
         </div>
       </section>
 
-      <section className="premium-section mx-auto max-w-7xl px-5 py-20 md:px-6">
+      <motion.section
+        className="premium-section mx-auto max-w-7xl px-5 py-20 md:px-6"
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
         <SectionHeader eyebrow="Servicios" title="Lo que puedo aportar" />
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <motion.div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4" variants={staggerGroup}>
           {services.map((service) => (
             <ServiceCard key={service.title} service={service} />
           ))}
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
-      <section id="proyectos" className="premium-section border-y border-white/10 bg-white/[0.025]">
+      <motion.section
+        id="proyectos"
+        className="premium-section border-y border-white/10 bg-white/[0.025]"
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
         <div className="mx-auto max-w-7xl px-5 py-20 md:px-6">
           <SectionHeader eyebrow="Portafolio" title="Proyectos destacados" />
 
-          <div className="mt-10 grid gap-6 lg:grid-cols-3">
-            {featuredProjects.map((project) => (
-              <ProjectCard key={project.title} project={project} onClick={() => openProject(project)} />
-            ))}
-          </div>
-        </div>
-      </section>
+          <motion.div className="case-study-intro mt-8 flex flex-col gap-4 text-zinc-400 md:flex-row md:items-end md:justify-between" variants={fadeUp}>
+            <p className="max-w-2xl leading-relaxed">
+              Cada proyecto funciona como una prueba de producto: flujo, arquitectura, pantallas y decisiones listas para explicar en una entrevista técnica.
+            </p>
+            <span className="inline-flex w-fit items-center rounded-full border border-emerald-300/20 bg-emerald-300/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-emerald-100">
+              Case studies reales
+            </span>
+          </motion.div>
 
-      <section className="premium-section mx-auto max-w-7xl px-5 py-20 md:px-6">
+          <motion.div className="mt-10 grid gap-6 lg:grid-cols-3" variants={staggerGroup}>
+            {featuredProjects.map((project, index) => (
+              <ProjectCard key={project.title} project={project} index={index + 1} onClick={() => openProject(project)} />
+            ))}
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="premium-section mx-auto max-w-7xl px-5 py-20 md:px-6"
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
         <SectionHeader eyebrow="Más trabajos" title="Todos mis proyectos" />
 
         <div className="mt-10 flex flex-wrap gap-3">
@@ -774,44 +1006,64 @@ export default function PortfolioAnderEli() {
           ))}
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project) => (
-            <ProjectCard key={`all-${project.title}`} project={project} onClick={() => openProject(project)} />
+        <motion.div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3" variants={staggerGroup}>
+          {filteredProjects.map((project, index) => (
+            <ProjectCard key={`all-${project.title}`} project={project} index={index + 1} onClick={() => openProject(project)} />
           ))}
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
-      <section id="stack" className="border-y border-white/10 bg-white/[0.025]">
+      <motion.section
+        id="stack"
+        className="border-y border-white/10 bg-white/[0.025]"
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
         <div className="mx-auto max-w-7xl px-5 py-20 md:px-6">
           <SectionHeader eyebrow="Tecnologías" title="Stack tecnológico" />
-          <div className="mt-10 flex flex-wrap gap-3">
+          <motion.div className="mt-10 flex flex-wrap gap-3" variants={staggerGroup}>
             {technologies.map((tech) => (
-              <span key={tech} className="rounded-lg border border-white/10 bg-black/20 px-4 py-3 text-zinc-200 transition hover:border-emerald-300/50 hover:bg-emerald-300/10">
+              <motion.span key={tech} className="rounded-lg border border-white/10 bg-black/20 px-4 py-3 text-zinc-200 transition hover:border-emerald-300/50 hover:bg-emerald-300/10" variants={fadeUp}>
                 {tech}
-              </span>
+              </motion.span>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      <section id="experiencia" className="mx-auto max-w-7xl px-5 py-20 md:px-6">
+      <motion.section
+        id="experiencia"
+        className="mx-auto max-w-7xl px-5 py-20 md:px-6"
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
         <SectionHeader eyebrow="Trayectoria" title="Timeline profesional" />
-        <div className="mt-12 space-y-5">
+        <motion.div className="mt-12 space-y-5" variants={staggerGroup}>
           {timeline.map((item) => (
-            <div key={item.title} className="surface-card grid gap-5 p-6 md:grid-cols-[180px_1fr]">
+            <motion.div key={item.title} className="surface-card grid gap-5 p-6 md:grid-cols-[180px_1fr]" variants={fadeUp}>
               <div className="text-xl font-black text-emerald-300">{item.year}</div>
               <div>
                 <h3 className="text-2xl font-bold">{item.title}</h3>
                 <p className="mt-3 leading-relaxed text-zinc-400">{item.text}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
-      <section className="border-y border-white/10 bg-white/[0.025]">
+      <motion.section
+        className="border-y border-white/10 bg-white/[0.025]"
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
         <div className="mx-auto max-w-7xl px-5 py-20 md:px-6">
-          <div className="surface-card p-6 md:p-8">
+          <motion.div className="surface-card p-6 md:p-8" variants={fadeUp}>
             <div className="flex items-center gap-3 text-emerald-300">
               <Terminal className="h-5 w-5" />
               <p className="text-sm font-bold uppercase tracking-[0.22em]">Terminal</p>
@@ -823,13 +1075,20 @@ export default function PortfolioAnderEli() {
               <p>&gt; loading deployment skills: Linux VPS, Nginx</p>
               <p className="text-amber-200">&gt; status: ready for Junior Developer role</p>
             </div>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      <section id="contacto" className="mx-auto max-w-7xl px-5 py-20 md:px-6">
-        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          <div>
+      <motion.section
+        id="contacto"
+        className="mx-auto max-w-7xl px-5 py-20 md:px-6"
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
+      >
+        <motion.div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start" variants={staggerGroup}>
+          <motion.div variants={fadeUp}>
             <p className="text-sm font-bold uppercase tracking-[0.22em] text-emerald-300">Contacto</p>
             <h2 className="mt-4 text-4xl font-black leading-tight md:text-6xl">
               Trabajemos juntos
@@ -839,9 +1098,9 @@ export default function PortfolioAnderEli() {
               proyectos de software, aplicaciones Android, APIs REST, sistemas administrativos
               y soluciones empresariales.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <motion.div className="grid gap-4 md:grid-cols-2" variants={staggerGroup}>
             <a
               href="https://wa.me/50254266873"
               target="_blank"
@@ -869,44 +1128,68 @@ export default function PortfolioAnderEli() {
               </h3>
               <p className="mt-2 text-zinc-400">Disponible para entrevistas, propuestas y colaboración.</p>
             </a>
-          </div>
-        </div>
-      </section>
+          </motion.div>
+        </motion.div>
+      </motion.section>
 
       <footer className="border-t border-white/10 px-5 py-8 text-center text-sm text-zinc-500">
         © 2026 Ander Eli · Junior Software Developer
       </footer>
 
+      <AnimatePresence>
       {selectedProject && currentGalleryItem && (
-        <div
+        <motion.div
           className="project-modal-overlay fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-black/85 p-3 backdrop-blur-xl sm:p-4 md:p-6"
           onClick={closeProject}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.22, ease: premiumEase }}
         >
-          <button
+          <motion.button
             type="button"
             onClick={closeProject}
             aria-label="Cerrar detalle del proyecto"
             className="project-modal-close btn-icon fixed right-4 top-4 z-[130] border-white/20 bg-black/70 text-white shadow-2xl shadow-black/40 backdrop-blur-md hover:bg-emerald-300 hover:text-black"
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.92 }}
+            transition={{ duration: 0.22, ease: premiumEase }}
           >
             <X className="h-4 w-4" />
-          </button>
+          </motion.button>
 
-          <div
+          <motion.div
             role="dialog"
             aria-modal="true"
             aria-labelledby="project-detail-title"
             className="project-modal surface-card relative grid h-[calc(100dvh-1.5rem)] min-h-0 w-full max-w-7xl overflow-y-auto overscroll-contain sm:h-[calc(100dvh-2rem)] lg:h-[min(900px,calc(100dvh-3rem))] lg:grid-cols-[minmax(0,1.18fr)_minmax(380px,0.82fr)] lg:overflow-hidden"
             onClick={(event) => event.stopPropagation()}
+            initial={{ opacity: 0, y: 24, scale: 0.985 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 18, scale: 0.985 }}
+            transition={{ duration: 0.32, ease: premiumEase }}
           >
             <div className="project-gallery-panel border-b border-white/10 bg-black/25 p-4 pt-16 sm:p-5 sm:pt-16 md:p-6 md:pt-6 lg:min-h-0 lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:border-b-0 lg:border-r">
               <div className="relative flex h-[42vh] min-h-[250px] max-h-[520px] items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-black/40 sm:h-[48vh] md:h-[560px] lg:h-[min(560px,calc(100dvh-14rem))] lg:min-h-[360px]">
-                <Image
-                  src={currentGalleryItem.src}
-                  alt={currentGalleryItem.title}
-                  fill
-                  sizes="(min-width: 1024px) 58vw, 100vw"
-                  className="object-contain p-2 transition duration-300"
-                />
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentGalleryItem.src}
+                    className="absolute inset-0"
+                    initial={{ opacity: 0, scale: 1.015 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.99 }}
+                    transition={{ duration: 0.28, ease: premiumEase }}
+                  >
+                    <Image
+                      src={currentGalleryItem.src}
+                      alt={currentGalleryItem.title}
+                      fill
+                      sizes="(min-width: 1024px) 58vw, 100vw"
+                      className="object-contain p-2"
+                    />
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
               <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5">
@@ -983,14 +1266,112 @@ export default function PortfolioAnderEli() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       <style jsx global>{`
         html {
           scroll-behavior: smooth;
           scroll-padding-top: 5rem;
+        }
+
+        .nav-shell {
+          box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 18px 60px rgba(0,0,0,0.18);
+        }
+
+        .nav-brand {
+          min-height: 2.5rem;
+        }
+
+        .nav-brand-mark {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          height: 2.25rem;
+          width: 2.25rem;
+          border: 1px solid rgba(110,231,183,0.24);
+          border-radius: 999px;
+          background: linear-gradient(145deg, rgba(110,231,183,0.18), rgba(103,232,249,0.08));
+          color: #d1fae5;
+          font-size: .92rem;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 14px 34px rgba(16,185,129,0.12);
+          transition: transform .24s ease, border-color .24s ease, background .24s ease;
+        }
+
+        .nav-brand:hover .nav-brand-mark {
+          transform: translateY(-1px);
+          border-color: rgba(110,231,183,0.54);
+          background: linear-gradient(145deg, rgba(110,231,183,0.28), rgba(103,232,249,0.12));
+        }
+
+        .nav-pill {
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.08),
+            0 18px 48px rgba(0,0,0,0.20);
+        }
+
+        .nav-link {
+          position: relative;
+          isolation: isolate;
+        }
+
+        .nav-link::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: -1;
+          border-radius: inherit;
+          background: linear-gradient(135deg, rgba(110,231,183,0.16), rgba(103,232,249,0.08));
+          opacity: 0;
+          transition: opacity .22s ease;
+        }
+
+        .nav-link:hover::before,
+        .nav-link.is-active::before {
+          opacity: 1;
+        }
+
+        .nav-link.is-active {
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.09);
+        }
+
+        .nav-active-indicator {
+          position: absolute;
+          inset: 0;
+          z-index: -1;
+          border-radius: inherit;
+          background: linear-gradient(135deg, rgba(110,231,183,0.18), rgba(103,232,249,0.10));
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+
+        .nav-cta,
+        .nav-icon-button {
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+
+        .nav-menu-toggle {
+          display: inline-flex;
+        }
+
+        @media (min-width: 768px) {
+          .nav-menu-toggle {
+            display: none;
+          }
+        }
+
+        .nav-cta:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 18px 42px rgba(16,185,129,.16);
+        }
+
+        .nav-mobile-panel {
+          animation: mobileNavIn .24s cubic-bezier(.2,.8,.2,1) both;
+        }
+
+        .nav-mobile-link {
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.045);
         }
 
         .hero-section {
@@ -1158,12 +1539,7 @@ export default function PortfolioAnderEli() {
           }
         }
 
-        .project-modal-overlay {
-          animation: modalBackdrop .18s ease both;
-        }
-
         .project-modal {
-          animation: modalPanel .24s cubic-bezier(.2,.8,.2,1) both;
           scrollbar-gutter: stable;
           box-shadow:
             inset 0 1px 0 rgba(255,255,255,0.08),
@@ -1273,6 +1649,12 @@ export default function PortfolioAnderEli() {
           color: #d4d4d8;
         }
 
+        @media (min-width: 768px) {
+          .btn-icon.nav-menu-toggle {
+            display: none;
+          }
+        }
+
         .fade-in {
           animation: fadeIn .65s ease both;
         }
@@ -1304,6 +1686,18 @@ export default function PortfolioAnderEli() {
             opacity: 1;
             transform: translateY(0) scale(1);
             filter: blur(0);
+          }
+        }
+
+        @keyframes mobileNavIn {
+          from {
+            opacity: 0;
+            transform: translateY(-8px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
           }
         }
 
@@ -1355,6 +1749,7 @@ export default function PortfolioAnderEli() {
         }
       `}</style>
     </main>
+    </MotionConfig>
   )
 }
 
@@ -1371,20 +1766,23 @@ function ServiceCard({ service }: { service: Service }) {
   const Icon = service.icon
 
   return (
-    <article className="surface-card hover-card premium-reveal p-6">
+    <motion.article className="surface-card hover-card p-6" variants={fadeUp}>
       <Icon className="h-9 w-9 text-emerald-300" />
       <h3 className="mt-5 text-xl font-bold">{service.title}</h3>
       <p className="mt-4 leading-relaxed text-zinc-400">{service.description}</p>
-    </article>
+    </motion.article>
   )
 }
 
-function ProjectCard({ project, onClick }: { project: Project; onClick: () => void }) {
+function ProjectCard({ project, index, onClick }: { project: Project; index: number; onClick: () => void }) {
   return (
-    <button
+    <motion.button
       type="button"
       className="project-card surface-card hover-card group w-full overflow-hidden text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
       onClick={onClick}
+      variants={fadeUp}
+      whileHover={{ y: -8, scale: 1.01, transition: { duration: 0.28, ease: premiumEase } }}
+      whileTap={{ scale: 0.985 }}
     >
       <span className="project-card-media relative block h-60 overflow-hidden border-b border-white/10 bg-black/30">
         <Image
@@ -1409,10 +1807,15 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
       <span className="block p-6">
         <span className="flex flex-wrap items-center justify-between gap-3">
           <span className="text-sm font-semibold text-emerald-300">{project.category}</span>
-          <span className="text-xs font-medium text-zinc-500">{project.gallery.length} pantallas</span>
+          <span className="text-xs font-medium uppercase tracking-[0.16em] text-zinc-500">Case {String(index).padStart(2, '0')}</span>
         </span>
         <span className="mt-3 block text-2xl font-black leading-tight">{project.title}</span>
         <span className="mt-4 block leading-relaxed text-zinc-400">{project.description}</span>
+
+        <span className="mt-5 flex items-center justify-between gap-3 border-t border-white/10 pt-4 text-xs text-zinc-500">
+          <span>{project.gallery.length} pantallas</span>
+          <span className="font-semibold text-emerald-200">Abrir recorrido</span>
+        </span>
 
         <span className="mt-6 flex flex-wrap gap-2">
           {project.stack.slice(0, 5).map((item) => (
@@ -1422,7 +1825,7 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
           ))}
         </span>
       </span>
-    </button>
+    </motion.button>
   )
 }
 
