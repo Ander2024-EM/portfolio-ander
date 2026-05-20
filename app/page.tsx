@@ -845,7 +845,7 @@ export default function PortfolioAnderEli() {
           </div>
 
           <h1 className="hero-title mt-8 max-w-4xl break-words text-5xl font-black leading-none tracking-tight sm:text-6xl md:text-8xl">
-            Ander Eli
+            Albert Elias
             <span className="block gradient-text">Software Developer</span>
           </h1>
 
