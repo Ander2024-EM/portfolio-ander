@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import {
   ArrowRight,
@@ -561,6 +561,24 @@ export default function PortfolioAnderEli() {
 
   const currentGalleryItem = selectedProject?.gallery[selectedImageIndex]
 
+  useEffect(() => {
+    if (!selectedProject) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') setSelectedProject(null)
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [selectedProject])
+
   function playClickSound() {
     if (!soundOn) return
 
@@ -582,6 +600,11 @@ export default function PortfolioAnderEli() {
     playClickSound()
     setSelectedProject(project)
     setSelectedImageIndex(0)
+  }
+
+  function closeProject() {
+    playClickSound()
+    setSelectedProject(null)
   }
 
   return (
@@ -843,33 +866,46 @@ export default function PortfolioAnderEli() {
 
       {selectedProject && currentGalleryItem && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-xl md:p-6"
-          onClick={() => setSelectedProject(null)}
+          className="project-modal-overlay fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-black/85 p-3 backdrop-blur-xl sm:p-4 md:p-6"
+          onClick={closeProject}
         >
+          <button
+            type="button"
+            onClick={closeProject}
+            aria-label="Cerrar detalle del proyecto"
+            className="project-modal-close btn-icon fixed right-4 top-4 z-[130] border-white/20 bg-black/70 text-white shadow-2xl shadow-black/40 backdrop-blur-md hover:bg-emerald-300 hover:text-black"
+          >
+            <X className="h-4 w-4" />
+          </button>
+
           <div
-            className="surface-card grid max-h-[94vh] w-full max-w-7xl overflow-hidden lg:grid-cols-[1.25fr_0.75fr]"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="project-detail-title"
+            className="project-modal surface-card relative grid h-[calc(100dvh-1.5rem)] w-full max-w-7xl overflow-y-auto overscroll-contain sm:h-[calc(100dvh-2rem)] lg:h-[min(900px,calc(100dvh-3rem))] lg:grid-cols-[minmax(0,1.18fr)_minmax(380px,0.82fr)] lg:overflow-hidden"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="overflow-y-auto border-b border-white/10 bg-black/25 p-4 md:p-6 lg:border-b-0 lg:border-r">
-              <div className="relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-black/40 md:h-[560px]">
+            <div className="border-b border-white/10 bg-black/25 p-4 pt-16 sm:p-5 sm:pt-16 md:p-6 md:pt-6 lg:h-full lg:overflow-y-auto lg:border-b-0 lg:border-r">
+              <div className="relative flex h-[42vh] min-h-[250px] max-h-[520px] items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-black/40 sm:h-[48vh] md:h-[560px] lg:h-[min(560px,calc(100dvh-14rem))] lg:min-h-[360px]">
                 <Image
                   src={currentGalleryItem.src}
                   alt={currentGalleryItem.title}
                   fill
                   sizes="(min-width: 1024px) 58vw, 100vw"
-                  className="object-contain p-2"
+                  className="object-contain p-2 transition duration-300"
                 />
               </div>
 
-              <div className="mt-4 grid grid-cols-3 gap-3 md:grid-cols-5">
+              <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5">
                 {selectedProject.gallery.map((item, index) => (
                   <button
                     key={item.src}
                     type="button"
                     onClick={() => setSelectedImageIndex(index)}
                     aria-label={`Ver captura: ${item.title}`}
-                    className={`relative h-20 overflow-hidden rounded-lg border bg-white/5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 ${
-                      selectedImageIndex === index ? 'border-emerald-300' : 'border-white/10 hover:border-emerald-300/50'
+                    aria-current={selectedImageIndex === index ? 'true' : undefined}
+                    className={`project-thumb relative h-20 overflow-hidden rounded-lg border bg-white/5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 ${
+                      selectedImageIndex === index ? 'border-emerald-300 shadow-lg shadow-emerald-950/30' : 'border-white/10 hover:border-emerald-300/50'
                     }`}
                   >
                     <Image src={item.src} alt="" fill sizes="120px" className="object-cover" />
@@ -878,23 +914,15 @@ export default function PortfolioAnderEli() {
               </div>
             </div>
 
-            <div className="overflow-y-auto p-6 md:p-8">
+            <div className="min-w-0 p-5 pt-7 sm:p-6 md:p-8 lg:h-full lg:overflow-y-auto lg:pr-10">
               <div className="flex items-start justify-between gap-4">
-                <div>
+                <div className="min-w-0 pr-12 sm:pr-14 lg:pr-2">
                   <p className="font-semibold text-emerald-300">{selectedProject.category}</p>
-                  <h3 className="mt-2 text-3xl font-black leading-tight md:text-5xl">{selectedProject.title}</h3>
+                  <h3 id="project-detail-title" className="mt-2 break-words text-3xl font-black leading-tight md:text-5xl">{selectedProject.title}</h3>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setSelectedProject(null)}
-                  aria-label="Cerrar proyecto"
-                  className="btn-icon shrink-0"
-                >
-                  <X className="h-4 w-4" />
-                </button>
               </div>
 
-              <div className="mt-8 rounded-lg border border-emerald-300/20 bg-emerald-300/10 p-5">
+              <div className="mt-7 rounded-lg border border-emerald-300/20 bg-emerald-300/10 p-5">
                 <p className="text-sm font-bold text-emerald-100">Recorrido actual</p>
                 <h4 className="mt-2 text-2xl font-black">{currentGalleryItem.title}</h4>
                 <p className="mt-3 leading-relaxed text-zinc-300">{currentGalleryItem.description}</p>
@@ -926,7 +954,7 @@ export default function PortfolioAnderEli() {
                 </ul>
               </div>
 
-              <div className="mt-8">
+              <div className="mt-8 pb-6">
                 <h4 className="text-xl font-black">Tecnologías</h4>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {selectedProject.stack.map((item) => (
@@ -967,6 +995,31 @@ export default function PortfolioAnderEli() {
           transform: translateY(-4px);
           border-color: rgba(110,231,183,0.45);
           background: rgba(110,231,183,0.075);
+        }
+
+        .project-modal-overlay {
+          animation: modalBackdrop .18s ease both;
+        }
+
+        .project-modal {
+          animation: modalPanel .24s cubic-bezier(.2,.8,.2,1) both;
+          scrollbar-gutter: stable;
+        }
+
+        .project-thumb {
+          transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+        }
+
+        .project-thumb:hover {
+          transform: translateY(-2px);
+        }
+
+        .project-modal-close {
+          transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+        }
+
+        .project-modal-close:hover {
+          transform: translateY(-1px) scale(1.03);
         }
 
         .btn-primary,
@@ -1033,6 +1086,28 @@ export default function PortfolioAnderEli() {
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+
+        @keyframes modalBackdrop {
+          from {
+            opacity: 0;
+          }
+
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes modalPanel {
+          from {
+            opacity: 0;
+            transform: translateY(16px) scale(.985);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
           }
         }
 
